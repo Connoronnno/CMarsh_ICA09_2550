@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace CMarsh_ICA08
 {
-    record Id { string student_id; };
+    record Id ( string student_id);
     public class Program
     {
         public static void Main(string[] args)
@@ -81,7 +81,26 @@ namespace CMarsh_ICA08
 
                 }
                 return y.ToJsonString(); });
-            app.Run();
+            app.MapPost("/delete", (Id id) => {
+                int rowsAffected;
+                JsonArray y = new JsonArray();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    connection.Open();
+
+                    string query = $"delete cs from Students s join class_to_student cs on cs.student_id=s.student_id where s.student_id={id.student_id};\r\ndelete r from Results r where r.student_id={id.student_id};\r\ndelete s from Students s where s.student_id={id.student_id};";
+                    Console.WriteLine(query);
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        rowsAffected = command.ExecuteNonQuery();
+                    }
+
+                }
+
+                return new {changed=rowsAffected};
+            });
+                app.Run();
         }
     }
 }

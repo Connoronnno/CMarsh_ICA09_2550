@@ -1,0 +1,83 @@
+﻿tr:nth-child(odd) {
+    background-color: mediumaquamarine;
+}
+
+tr {
+    background-color: white;
+}
+
+    tr#og {
+        background-color: mediumseagreen;
+    }
+
+section#outer {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    background-color: white;
+}
+
+section {
+    grid-column: 2;
+    background-color: lavender;
+}
+
+label, input, button {
+    margin: 5px;
+}
+
+label {
+    text-align: right;
+}
+
+div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+input[type='checkbox'] {
+    justify-self: left;
+}
+
+.rightb {
+    grid-column: 2;
+}
+
+button {
+    grid-column: span 2;
+}
+
+header {
+    background-color: white;
+    text-shadow: 3px 3px 3px gray;
+    color: white;
+    font-size: 50px;
+    font-weight: 0;
+    font-family: Impact, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    grid-column: span 3;
+}
+
+td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+table {
+    justify-self: center;
+    grid-column: span 2;
+    width: 600px;
+}
+
+div#status {
+    grid-column: 2;
+    display: block;
+}
+
+footer {
+    background-color: white;
+    color: black;
+    font-size: 5px;
+    font-weight: 0;
+    text-align: center;
+    grid-column: 2;
+}
