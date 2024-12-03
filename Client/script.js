@@ -33,13 +33,13 @@ function BuildStudents() {
             table += '<td>';
             table += row.sId;
             table += '</td>';
-            table += '<td>';
+            table += '<td id='+row.sId+' class="fname">';
             table += row.fName;
             table += '</td>';
-            table += '<td>';
+            table += '<td id='+row.sId+' class="lname">';
             table += row.lName;
             table += '</td>';
-            table += '<td>';
+            table += '<td id=' + row.sId +' class="schoolid">';
             table += row.schoolId;
             table += '</td>';
             table += "<td><button id='" + row.sId + "' class='delete'>Delete</button><button id='" + row.sId + "' class='edit'>Edit</button></td>";
@@ -119,6 +119,15 @@ function Delete() {
 }
 function Edit() {
     console.log(this.id);
+    if ($("input").length > 0) BreakEdit();
+    $("#" + this.id + ".fname").html("<input type='text' placeholder=" + $("#" + this.id + ".fname").val() + " value=" + $("#" + this.id + ".fname").html() +"></input>");
+    $("#" + this.id + ".lname").html("<input type='text' placeholder=" + $("#" + this.id + ".lname").val() + " value=" + $("#" + this.id + ".fname").html() + "></input>");
+    $("#" + this.id + ".schoolid").html("<input type='text' placeholder=" + $("#" + this.id + ".schoolid").html() + " value=" + $("#" + this.id + ".fname").html() + "></input>");
+
+}
+function BreakEdit() {
+    id = $("input").parent().attr('id');
+    $("#" + id + ".fname").html($("#" + id + ".fname").child().val());
 }
 function Update() {
     id = this.id.split('_')[0];

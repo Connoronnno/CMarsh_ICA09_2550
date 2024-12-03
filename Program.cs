@@ -55,7 +55,7 @@ namespace CMarsh_ICA08
 
                     connection.Open();
 
-                    string query = "select c.class_id, c.class_desc, c.days, c.start_date, c.instructor_id, i.first_name, i.last_name  from Classes c join class_to_student cs on cs.class_id=c.class_id join Instructors i on i.instructor_id=c.instructor_id where cs.student_id=359";
+                    string query = "select c.class_id, c.class_desc, c.days, c.start_date, c.instructor_id, i.first_name, i.last_name  from Classes c join class_to_student cs on cs.class_id=c.class_id join Instructors i on i.instructor_id=c.instructor_id where cs.student_id="+id.student_id;
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -82,6 +82,7 @@ namespace CMarsh_ICA08
                 }
                 return y.ToJsonString(); });
             app.MapPost("/delete", (Id id) => {
+                Console.WriteLine(id);
                 int rowsAffected;
                 JsonArray y = new JsonArray();
                 using (SqlConnection connection = new SqlConnection(connectionString))
