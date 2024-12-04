@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 namespace CMarsh_ICA08
 {
     record Id ( string student_id);
+    record Student (string student_id, string fname, string lname, string schoolid);
     public class Program
     {
         public static void Main(string[] args)
@@ -35,27 +36,27 @@ namespace CMarsh_ICA08
                         while (reader.Read())
                         {
                             // Access data using reader["ColumnName"] or reader.GetXXX() methods
-                            j.Add((object) new {
+                            j.Add((object)new {
                                 sId = reader["student_id"],
                                 fName = reader["first_name"],
                                 lName = reader["last_name"],
-                                schoolId= reader["school_id"]
+                                schoolId = reader["school_id"]
                             });
-                            
+
                         }
                     }
                 }
 
             }
             app.MapGet("/students", () => { Console.WriteLine("why"); return j.ToJsonString(); });
-            app.MapPost("/classes", (Id id) =>{
+            app.MapPost("/classes", (Id id) => {
                 JsonArray y = new JsonArray();
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
 
                     connection.Open();
 
-                    string query = "select c.class_id, c.class_desc, c.days, c.start_date, c.instructor_id, i.first_name, i.last_name  from Classes c join class_to_student cs on cs.class_id=c.class_id join Instructors i on i.instructor_id=c.instructor_id where cs.student_id="+id.student_id;
+                    string query = "select c.class_id, c.class_desc, c.days, c.start_date, c.instructor_id, i.first_name, i.last_name  from Classes c join class_to_student cs on cs.class_id=c.class_id join Instructors i on i.instructor_id=c.instructor_id where cs.student_id=" + id.student_id;
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -68,7 +69,7 @@ namespace CMarsh_ICA08
                                     cId = reader["class_id"],
                                     desc = reader["class_desc"],
                                     days = reader["days"],
-                                    sDate = reader["start_date"], 
+                                    sDate = reader["start_date"],
                                     iId = reader["instructor_id"],
                                     fName = reader["first_name"],
                                     lName = reader["last_name"]
@@ -99,7 +100,26 @@ namespace CMarsh_ICA08
 
                 }
 
-                return new {changed=rowsAffected};
+                return new { changed = rowsAffected };
+            });
+            app.MapPost("/update", (Student stu) => {
+                Console.WriteLine(stu);
+                int rowsAffected;
+                JsonArray y = new JsonArray();
+                /*using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    connection.Open();
+                    Console.WriteLine(query);
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        rowsAffected = command.ExecuteNonQuery();
+                    }
+
+                }
+
+                return new { changed = rowsAffected };*/
+                return new {a="hell0" };
             });
                 app.Run();
         }

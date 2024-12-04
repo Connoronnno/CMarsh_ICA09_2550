@@ -115,44 +115,47 @@ function BuildTitles() {
 }
 function Delete() {
     console.log(this.id);
-    AjaxRequest("https://localhost:60796/delete", "POST", { student_id: this.id },'JSON', (data) => { console.log(data); BuildTitles(); $("#main").html($("#main").html() + "Changed" +1 + "Rows") }, function (request, status, error) { console.log(request, "break", status, "break", error); });
+    AjaxRequest("https://localhost:60796/delete", "POST", { student_id: this.id },'JSON', (data) => { console.log(data); $("#main").html($("#main").html() + "Changed" +1 + "Rows") }, function (request, status, error) { console.log(request, "break", status, "break", error); });
 }
 function Edit() {
     console.log(this.id);
     if ($("input").length > 0) BreakEdit();
-    $("#" + this.id + ".fname").html("<input type='text' placeholder=" + $("#" + this.id + ".fname").val() + " value=" + $("#" + this.id + ".fname").html() +"></input>");
-    $("#" + this.id + ".lname").html("<input type='text' placeholder=" + $("#" + this.id + ".lname").val() + " value=" + $("#" + this.id + ".fname").html() + "></input>");
-    $("#" + this.id + ".schoolid").html("<input type='text' placeholder=" + $("#" + this.id + ".schoolid").html() + " value=" + $("#" + this.id + ".fname").html() + "></input>");
-
+    $("#" + this.id + ".fname").html("<input type='text' placeholder='" + $("#" + this.id + ".fname").html() + "' value='" + $("#" + this.id + ".fname").html() +"'></input>");
+    $("#" + this.id + ".lname").html("<input type='text' placeholder='" + $("#" + this.id + ".lname").html() + "' value='" + $("#" + this.id + ".lname").html() + "'></input>");
+    $("#" + this.id + ".schoolid").html("<input type='text' placeholder='" + $("#" + this.id + ".schoolid").html() + "' value='" + $("#" + this.id + ".schoolid").html() + "'></input>");
+    $("#" + this.id + ".delete").html("Update");
+    $("#" + this.id + ".edit").html("Cancel");
+    $("#" + this.id + ".delete").off("click");
+    $("#" + this.id + ".edit").off("click");
+    $("#" + this.id + ".delete").click(Update);
+    $("#" + this.id + ".edit").click(BreakEdit);
 }
 function BreakEdit() {
     id = $("input").parent().attr('id');
-    $("#" + id + ".fname").html($("#" + id + ".fname").child().val());
+    $("#" + id + ".fname").html($("#" + id + ".fname").children().val());
+    $("#" + id + ".lname").html($("#" + id + ".lname").children().val());
+    $("#" + id + ".schoolid").html($("#" + id + ".schoolid").children().val());
+    $("#" + id + ".delete").html("Delete");
+    $("#" + id + ".edit").html("Edit");
+    $("#" + id + ".delete").off("click");
+    $("#" + id + ".edit").off("click");
+    $("#" + id + ".delete").click(Delete);
+    $("#" + id + ".edit").click(Edit);
 }
 function Update() {
-    id = this.id.split('_')[0];
+    id = this.id;
     console.log(id);
-    AjaxRequest('service.php', 'POST', {
-        type: 'update',
-        id: id,
-        title: document.querySelector('input#' + id + '_title').value != '' ? document.querySelector('input#' + id + '_title').value : document.querySelector('input#' + id + '_title').placeholder,
-        utype: document.querySelector('select#' + id + '_type').value,
-        price: document.querySelector('input#' + id + '_price').value != '' ? document.querySelector('input#' + id + '_price').value : document.querySelector('input#' + id + '_price').placeholder
-    },
-        'json',
+    AjaxRequest("https://localhost:60796/update", "POST", {
+        student_id: id,
+        fname: $("#" + id + ".fname").children().val(),
+        lname: $("#" + id + ".lname").children().val(),
+        schoolid: $("#" + id + ".schoolid").children().val()
+    }, 'JSON',
         (data) => {
-            id = data.id;
-            $('#' + id + '_update').replaceWith('<button id="' + id + '_delete">Delete</button>');
-            $('#' + id + '_cancel').replaceWith('<button id="' + id + '_edit">Edit</button>');
-            $('td#' + id + '_title').html(document.querySelector('input#' + id + '_title').value != '' ? document.querySelector('input#' + id + '_title').value : document.querySelector('input#' + id + '_title').placeholder);
-            console.log(document.querySelector('select#' + id + '_type'));
-            $('td#' + id + '_type').html(document.querySelector('select#' + id + '_type').value);
-            $('td#' + id + '_price').html(document.querySelector('input#' + id + '_price').value != '' ? document.querySelector('input#' + id + '_price').value : document.querySelector('input#' + id + '_price').placeholder);
-            $('#' + id + '_edit').click(Edit);
-            $('#' + id + '_delete').click(Delete);
+            console.log(data);
+            $("#main").html($("#main").html() + "Changed" + 1 + "Rows")
         },
-        function (request, status, error) { console.log(request, "break", status, "break", error); }
-    );
+        function (request, status, error) { console.log(request, "break", status, "break", error); });
 }
 /*
 * AjaxRequest(url, method, data, datatype, success, error)
